@@ -1,10 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <?php 
+<?php 
         $host = 'localhost';
         $db = 'senai_aulaphp';
         $user = 'Felipe';
@@ -18,15 +12,15 @@
         $database->connect();
         // Obtém a instância PDO para realizar consultas
         $pdo = $database->getConnection();
-    ?>
-</head>
-<body>
-<?php
+
+    $login = htmlspecialchars($_GET['login']);
+    $senha = htmlspecialchars($_GET['senha']);
+
     // Verifica se a variável $pdo, que deve ser uma instância de PDO, está definida e é válida
     if ($pdo) {
         try {
             // Prepara uma consulta SQL para selecionar as colunas 'id' e 'nome' da tabela 'usuario'
-            $stmt = $pdo->prepare("SELECT id, nome FROM senai_aulaphp_1");
+            $stmt = $pdo->prepare("SELECT * from senai_aulaphp_1 where nome = '$login' and senha = '$senha'");
             
             // Executa a consulta preparada
             $stmt->execute();
@@ -36,17 +30,9 @@
     
             // Verifica se há algum resultado na consulta
             if ($resultados) {
-                // Itera sobre cada linha de resultado
-                foreach ($resultados as $row) {
-                    // Exibe o valor da coluna 'id' do registro
-                    echo "ID: " . $row['id'], " = Nome: " . $row['nome'] . "<br>";
-                    
-                    // Exibe o valor da coluna 'nome' do registro
-                    
-                }
+                echo("Logado!");
             } else {
-                // Caso não haja resultados, exibe uma mensagem indicando que nenhum registro foi encontrado
-                echo "Nenhum registro encontrado.<br>";
+                echo ("Login ou senha não encontrados.");
             }
         } catch (PDOException $e) {
             // Captura e exibe qualquer exceção (erro) que possa ocorrer durante a consulta ao banco de dados
@@ -54,5 +40,3 @@
         }
     }
 ?>
-</body>
-</html>
